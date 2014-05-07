@@ -76,9 +76,10 @@ bool ScenarioWriter::WriteAndClose()
 		writer.writeStartElement("SceneAction");
 		writer.writeAttribute("id",QString::number(iCount));
 		writer.writeAttribute("order",QString::number(iCount));
-		writer.writeAttribute("type",QString::number(1));
+        writer.writeAttribute("type",QString::number(item->getObjectType()));
 		writer.writeAttribute("source",item->getSourceName());
 		writer.writeAttribute("dest",item->getDestName());
+        writer.writeAttribute("title",item->gettextTite());
 		writer.writeAttribute("repeat","3");
 		writer.writeAttribute("waittime","1000");
 		writer.writeEndElement();

@@ -83,7 +83,8 @@ private:
 	QGraphicsView* m_graphicsView;
 	//AutomGraphicsScene m_graphicsScene;
 	void createMessageTableView(); //gui related management
-	void createAllocationTableView();
+    //void createAllocationTableView();
+    void createSceneActionTableView();
 	void createPropertyTableView();
 	bool eventFilter(QObject* target,QEvent* event);
 	BOMObject* FindBOMType(QString BOMTypeName);

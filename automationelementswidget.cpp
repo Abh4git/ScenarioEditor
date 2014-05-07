@@ -143,7 +143,9 @@ void AutomationElementsWidget::setupWidgets()
 	verticalRightLayout->setStretchFactor(this,4);
 	
 	
-	createAllocationTableView();
+    //commented and uncommented abhilash 7 may
+    //createAllocationTableView();
+    createSceneActionTableView();
 
 	QSplitter* splitVertBetwnAllocAndPropBox= new QSplitter(Qt::Vertical);
 
@@ -264,7 +266,10 @@ void AutomationElementsWidget::setActionList()
 	for(int i=0; i<this->m_tblAllocation->rowCount(); i++)
 	{
 		QString order= this->m_tblAllocation->item(i, 0)->text();
-		QString type= this->m_tblAllocation->item(i, 1)->text();
+        QComboBox* comboOrder=(QComboBox*)this->m_tblAllocation->cellWidget(i,1);
+         int selType=comboOrder->currentIndex();
+         selType++;
+        QString type=QString::number(selType);
 
 		QComboBox* combo=(QComboBox*)this->m_tblAllocation->cellWidget(i,2);  
 		int selIndex=combo->currentIndex();
@@ -276,14 +281,16 @@ void AutomationElementsWidget::setActionList()
 		QString dest= getInstanceIdentifier(selIndexDest);
 		QString repeat= this->m_tblAllocation->item(i, 4)->text();
 		QString waittime= this->m_tblAllocation->item(i, 5)->text();
+        QString title= this->m_tblAllocation->item(i, 6)->text();
 		if (order!="" && source!="")
 		{
-		SceneAction* sceneAction= new SceneAction(QString::number(i),type.toInt(),order.toInt(), source,dest,repeat.toInt(),waittime.toInt());
+
+        SceneAction* sceneAction= new SceneAction(QString::number(i),type.toInt(),order.toInt(), source,dest,repeat.toInt(),waittime.toInt(),title);
 		this->m_currentSceneActions.append(sceneAction);
 		}
 
 	}
-	this->m_currentView->setCurrentSceneActionList(this->m_currentSceneActions);
+    this->m_currentView->setCurrentSceneActionList(this->m_currentSceneActions);
 
 }
 
@@ -346,7 +353,11 @@ void AutomationElementsWidget::refreshActionList()
         itabReatNoofTimes->setToolTip("Specify No of Times the action is to be performed");
         itabReatNoofTimes->setText("3");
         this->m_tblAllocation->setItem (i, 4,itabReatNoofTimes );
-
+        QTableWidgetItem *itabTitle;
+        itabTitle= new QTableWidgetItem();
+        itabTitle->setToolTip("Specify Message Title");
+        itabTitle->setText("Deafult");
+        this->m_tblAllocation->setItem (i, 6,itabTitle );
 
 	}	
 	
@@ -439,12 +450,13 @@ void AutomationElementsWidget::contextMenuEvent(QContextMenuEvent *event)
 	this->m_tblMessages->setCellWidget(1,1,button); */
 
 }
-
-void AutomationElementsWidget::createAllocationTableView()
+//renamed to createSceneActionTableView
+//void AutomationElementsWidget::createAllocationTableView()
+    void AutomationElementsWidget::createSceneActionTableView()
 {
 	//Alloaction table here
 	this->m_tblAllocation= new QTableWidget;
-	this->m_tblAllocation->setColumnCount(6);
+    this->m_tblAllocation->setColumnCount(7);
 	this->m_tblAllocation->setRowCount(2);
 	QStringList msgHeaders;
 	msgHeaders.append("Order");
@@ -453,6 +465,7 @@ void AutomationElementsWidget::createAllocationTableView()
 	msgHeaders.append("Destination");
 	msgHeaders.append("NoofTimesToRepeat");
 	msgHeaders.append("TimeToWaitTillNextStep");
+    msgHeaders.append("Title");
 	this->m_tblAllocation->setHorizontalHeaderLabels(msgHeaders);
 	
 		//from scl

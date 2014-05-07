@@ -20,9 +20,10 @@ public:
 		\param destObj string
 		\param repeatNooftimes int
 		\param waitTime int
+        \param txtTitle string
 	*/
 	
-	SceneAction(QString id,int type,int orderInList,QString sourceObj, QString destObj, int repeatNoofTimes, int waitTime, QString extImage="" )
+    SceneAction(QString id,int type,int orderInList,QString sourceObj, QString destObj, int repeatNoofTimes, int waitTime, QString txtTitle,QString extImage="" )
 	{
 		m_id=id;
 		m_type=type;
@@ -31,6 +32,7 @@ public:
 		m_timesRepeat=repeatNoofTimes;
 		m_waitTimeBeforeNext=waitTime;
 		m_extImageFile=extImage;
+        m_textTitle= txtTitle;
 		//m_point=point;
 	}
 	//! Destructor
@@ -89,6 +91,13 @@ public:
 	{
 		return m_waitTimeBeforeNext;
 	}
+    /*!
+        Returns the title which is shown on message/callout/signal
+    */
+    QString gettextTite()
+    {
+        return m_textTitle;
+    }
 private:
 	QString m_id;
 	int m_type;
@@ -97,6 +106,7 @@ private:
 	int m_timesRepeat;
 	int m_waitTimeBeforeNext;
 	QString m_extImageFile;
+    QString m_textTitle;
 	//QPoint m_point;
 };
 
