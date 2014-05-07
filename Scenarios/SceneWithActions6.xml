@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Scenario>
+    <SceneTopology>
+        <SceneItem id="PlantOperator.1" type="1" name="Testme" pos="-9,174"/>
+        <SceneItem id="ENGG-SPLUS.1" type="1" name="Testme" pos="169,121"/>
+        <SceneItem id="PM877.1" type="1" name="Testme" pos="263,300"/>
+        <SceneItem id="OPER-SPLUS.1" type="1" name="Testme" pos="388,144"/>
+        <SceneItem id="COM_BUS.1" type="1" name="Testme" pos="-51,236"/>
+    </SceneTopology>
+    <SceneActions>
+        <SceneAction id="1" order="1" type="1" source="PlantOperator.1" dest="ENGG-SPLUS.1" repeat="3" waittime="1000"/>
+        <SceneAction id="2" order="2" type="1" source="ENGG-SPLUS.1" dest="OPER-SPLUS.1" repeat="3" waittime="1000"/>
+    </SceneActions>
+    <ComActions/>
+</Scenario>

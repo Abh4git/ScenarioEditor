@@ -1,0 +1,23 @@
+<UI version="4.0" >
+ <class>AutomationElementsWidget</class>
+ <widget class="QWidget" name="AutomationElementsWidget" >
+  <property name="objectName" >
+   <string notr="true">AutomationElementsWidget</string>
+  </property>
+  <property name="geometry" >
+   <rect>
+	<x>0</x>
+	<y>0</y>
+	<width>400</width>
+	<height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>AutomationElementsWidget</string>
+  </property>  
+ </widget>
+ <layoutDefault spacing="6" margin="11" />
+ <pixmapfunction></pixmapfunction>
+ <resources/>
+ <connections/>
+</UI>

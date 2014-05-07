@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Scenario>
+    <SceneTopology>
+        <SceneItem id="OPER-SPLUS.1" type="1" name="Testme" pos="120,247"/>
+        <SceneItem id="HPC800.1" type="1" name="Testme" pos="361,342"/>
+        <SceneItem id="COM_BUS.1" type="1" name="Testme" pos="10,295"/>
+    </SceneTopology>
+    <SceneActions>
+        <SceneAction id="1" order="1" type="1" source="OPER-SPLUS.1" dest="HPC800.1" repeat="3" waittime="1000"/>
+        <SceneAction id="2" order="2" type="1" source="HPC800.1" dest="HPC800.1" repeat="3" waittime="1000"/>
+    </SceneActions>
+    <ComActions/>
+</Scenario>

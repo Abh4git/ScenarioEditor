@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Scenario>
+    <SceneTopology>
+        <SceneItem id="CONTROL_DEVICE.1" type="1" name="Testme" pos="-29,92"/>
+        <SceneItem id="BOILER.1" type="1" name="Testme" pos="-21,240"/>
+        <SceneItem id="TURBINE.1" type="1" name="Testme" pos="213,237"/>
+        <SceneItem id="GENERATOR.1" type="1" name="Testme" pos="436,224"/>
+    </SceneTopology>
+    <SceneActions>
+        <SceneAction id="1" order="1" type="1" source="BOILER.1" dest="TURBINE.1" repeat="3" waittime="1000"/>
+        <SceneAction id="2" order="2" type="1" source="TURBINE.1" dest="GENERATOR.1" repeat="3" waittime="1000"/>
+    </SceneActions>
+    <ComActions/>
+</Scenario>

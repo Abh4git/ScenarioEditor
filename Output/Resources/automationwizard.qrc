@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>alarm.ico</file>
+        <file>busbar32.ico</file>
+        <file>newscene.ico</file>
+        <file>openscene.ico</file>
+        <file>playscene.ico</file>
+    </qresource>
+</RCC>

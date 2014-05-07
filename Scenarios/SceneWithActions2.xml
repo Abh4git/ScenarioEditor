@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Scenario>
+    <SceneTopology>
+        <SceneItem id="ENGG-SPLUS.1" type="1" name="Testme" pos="-62,75"/>
+        <SceneItem id="COM_BUS.1" type="1" name="Testme" pos="-75,166"/>
+        <SceneItem id="OPER-SPLUS.1" type="1" name="Testme" pos="210,74"/>
+        <SceneItem id="HIST-SPLUS.1" type="1" name="Testme" pos="436,113"/>
+        <SceneItem id="HPC800.1" type="1" name="Testme" pos="169,262"/>
+    </SceneTopology>
+    <SceneActions/>
+    <ComActions/>
+</Scenario>
