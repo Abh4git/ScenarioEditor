@@ -321,7 +321,8 @@ void AutomationElementsWidget::refreshActionList()
         m_ComboActionType->addItem("2"); //Signal
         m_ComboActionType->addItem("3");//Steam/Heat
         m_ComboActionType->addItem("4");//Callout
-        m_ComboActionType->setToolTip("1-Message,2-Signal,3-SteamorHeat,4-Callout");
+        m_ComboActionType->addItem("5");//Custom
+        m_ComboActionType->setToolTip("1-Message,2-Signal,3-SteamorHeat,4-Callout,5-Custom");
 		foreach (BOMInstance* inst,this->m_BOMInstancesList)
 		{
 			if (inst->GetContainedBOMType()->GetModelIdentification()->GetName()!="COM_BUS")
