@@ -9,7 +9,8 @@ HEADERS += ./AutomGraphicsScene.h \
     ./automationwizard.h \
     ./AutomGraphicsView.h \
      ./objectsList.h \
-    ./automationelementswidget.h
+    ./automationelementswidget.h \
+    editorevent.h
 SOURCES += ./automationelementswidget.cpp \
     ./automationwizard.cpp \
     ./AutomGraphicsScene.cpp \
@@ -18,7 +19,8 @@ SOURCES += ./automationelementswidget.cpp \
     ./objectsList.cpp \
     ./ScenarioReader.cpp \
     ./ScenarioWriter.cpp \
-    ./Singleton.cpp
+    ./Singleton.cpp \
+    editorevent.cpp
 FORMS += ./automationwizard.ui \
     ./automationelementswidget.ui
 RESOURCES += Resources/automationwizard.qrc

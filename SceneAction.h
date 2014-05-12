@@ -33,6 +33,7 @@ public:
 		m_waitTimeBeforeNext=waitTime;
 		m_extImageFile=extImage;
         m_textTitle= txtTitle;
+        m_order=orderInList;
 		//m_point=point;
 	}
 	//! Destructor
@@ -46,6 +47,16 @@ public:
 	{
 		return m_id;
 	}
+
+    /*!
+        Returns the order
+    */
+
+    int getOrder()
+    {
+        return m_order;
+    }
+
 	//! getObjectType
 	/*!
 		Returns the objectType as integer	
@@ -107,6 +118,7 @@ private:
 	int m_waitTimeBeforeNext;
 	QString m_extImageFile;
     QString m_textTitle;
+    int m_order;
 	//QPoint m_point;
 };
 

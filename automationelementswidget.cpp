@@ -217,8 +217,11 @@ bool AutomationElementsWidget::eventFilter(QObject* target,QEvent* event)
 		}
 		//return true;
 	}
-    if (event->type()==QEvent::ChildRemoved)
+    //if (event->type()==QEvent::ChildRemoved)
+    if (event->type()==EditorEvent::clearAll)
     {
+        //msgbox.setText("reset all");
+        //msgbox.exec();
 
         //Cleared items redirected using this
         refreshActionList();
@@ -227,8 +230,79 @@ bool AutomationElementsWidget::eventFilter(QObject* target,QEvent* event)
 
         //return true;
     }
-	
+
+    //if (event->type()==QEvent::ChildAdded)
+    if (event->type()==EditorEvent::openScene)
+    {
+
+        msgbox.setText("Open File");
+        msgbox.exec();
+        //Cleared items redirected using this
+        openScenarioFromFile();
+        //msgbox.setText("Conext menu clear");
+        //msgbox.exec();
+
+        //return true;
+    }
+
 	return QWidget::eventFilter(target,event);
+}
+
+void AutomationElementsWidget::loadScenarioActionsToTable()
+{
+    QMessageBox box;
+    //box.setText(QString::number (this->m_currentView->getCurrentSceneActions().count()));
+   // box.exec();
+    QList<SceneAction*> currentSceneActions=this->m_currentView->getCurrentSceneActions();
+    refreshActionList();
+    //now set the right values
+
+    for(int i=0; i<currentSceneActions.count();i++) // this->m_tblAllocation->rowCount(); i++)
+    {
+
+        SceneAction* actionCurrent=currentSceneActions.at(i);
+         QComboBox* comboActionType=(QComboBox*)this->m_tblAllocation->cellWidget(i,1);
+         QComboBox* comboSource=(QComboBox*)this->m_tblAllocation->cellWidget(i,2);
+         QComboBox* comboDest=(QComboBox*)this->m_tblAllocation->cellWidget(i,3);
+
+           QTableWidgetItem *itabOrder = (QTableWidgetItem *) this->m_tblAllocation->item(i,0);
+           itabOrder->setText(QString::number(actionCurrent->getOrder()));
+         //QTableWidgetItem *itabOrder = (QTableWidgetItem *) this->m_tblAllocation->cellWidget(i,0);
+         //itabOrder->setText(QString::number( i+1)); //QString::number(m_Order));
+         this->m_tblAllocation->setItem (i, 0,itabOrder );
+
+
+         QTableWidgetItem *itabTimeToNextAction = this->m_tblAllocation->item(i,5);
+         itabTimeToNextAction->setText(QString::number( actionCurrent->getwaitTimeBeforeNext()));
+         this->m_tblAllocation->setItem (i, 5,itabTimeToNextAction );
+         QTableWidgetItem *itabReatNoofTimes= this->m_tblAllocation->item(i,4);
+         itabReatNoofTimes->setText(QString::number( actionCurrent->getNoofTimesToRepeat()));
+         this->m_tblAllocation->setItem (i, 4,itabReatNoofTimes );
+
+         QTableWidgetItem *itabTitle = this->m_tblAllocation->item(i,6);
+         itabTitle->setText(actionCurrent->gettextTite());
+         this->m_tblAllocation->setItem (i, 6,itabTitle );
+         //box.setText("Works till here");
+           //box.exec();
+
+         int indexType = comboActionType->findData(QString::number(actionCurrent->getObjectType()));
+
+             if ( indexType != -1 ) { // -1 for not found
+                comboActionType->setCurrentIndex(indexType);
+             }
+
+             int indexSource = comboSource->findData(actionCurrent->getSourceName());
+
+                 if ( indexSource != -1 ) { // -1 for not found
+                    comboSource->setCurrentIndex(indexSource);
+                 }
+
+                 int indexDest = comboSource->findData(actionCurrent->getDestName());
+
+                     if ( indexDest != -1 ) { // -1 for not found
+                        comboDest->setCurrentIndex(indexDest);
+                     }
+    }
 }
 
 QString AutomationElementsWidget::getInstanceIdentifier(int index)
@@ -282,7 +356,7 @@ void AutomationElementsWidget::setActionList()
 		QString repeat= this->m_tblAllocation->item(i, 4)->text();
 		QString waittime= this->m_tblAllocation->item(i, 5)->text();
         QString title= this->m_tblAllocation->item(i, 6)->text();
-		if (order!="" && source!="")
+        if (order!="" && source!="" && title!="Default")
 		{
 
         SceneAction* sceneAction= new SceneAction(QString::number(i),type.toInt(),order.toInt(), source,dest,repeat.toInt(),waittime.toInt(),title);
@@ -317,19 +391,19 @@ void AutomationElementsWidget::refreshActionList()
 		m_ComboDest= new QComboBox(this);
         QComboBox* m_ComboActionType;
         m_ComboActionType= new QComboBox(this);
-        m_ComboActionType->addItem("1"); //Message
-        m_ComboActionType->addItem("2"); //Signal
-        m_ComboActionType->addItem("3");//Steam/Heat
-        m_ComboActionType->addItem("4");//Callout
-        m_ComboActionType->addItem("5");//Custom
+        m_ComboActionType->addItem("1","1"); //Message
+        m_ComboActionType->addItem("2","2"); //Signal
+        m_ComboActionType->addItem("3", "3");//Steam/Heat
+        m_ComboActionType->addItem("4","4");//Callout
+        m_ComboActionType->addItem("5","5");//Custom
         m_ComboActionType->setToolTip("1-Message,2-Signal,3-SteamorHeat,4-Callout,5-Custom");
 		foreach (BOMInstance* inst,this->m_BOMInstancesList)
 		{
 			if (inst->GetContainedBOMType()->GetModelIdentification()->GetName()!="COM_BUS")
 			{
 			QString identifier= inst->GetContainedBOMType()->GetModelIdentification()->GetName() + "." + QString::number(inst->GetInstanceNumber());
-			m_ComboSource->addItem(identifier);
-            m_ComboDest->addItem(identifier);
+            m_ComboSource->addItem(identifier,identifier);
+            m_ComboDest->addItem(identifier,identifier);
 			actualCount++;
 			}
 		}
@@ -371,8 +445,49 @@ void AutomationElementsWidget::openScenarioFromFile()
 
 		//from instances 
 
-	
-	
+    QMessageBox box;
+
+    QString selfilter = tr("XML (*.xml)");
+    QString fileName = QFileDialog::getOpenFileName(this,"Open Scene File","C:",  tr("XML Scenaio files (*.xml)" ), &selfilter );
+    //Reading Scenario
+    if  (fileName != "")
+    {
+            ScenarioReader* reader1=new ScenarioReader(fileName);
+            reader1->SetDirectory("C:/");
+            reader1->ReadDefintions();
+            QList<SceneItem*> topology;
+            topology= reader1->GetSceneTopology();
+
+            this->m_currentView->setCurrentSceneItemsList(topology);
+            QList<SceneAction*> actions=reader1->GetActionSequence();
+
+            this->m_currentView->setCurrentSceneActionList(actions);
+            //box.setText(QString::number(actions.count()));
+            //box.exec();
+            QList<ComAction*> comactions=reader1->GetComActions();
+
+
+        this->m_BOMInstancesList=  QList<BOMInstance*>();
+        foreach(SceneItem* item,topology)
+        {
+            QString identifier=item->getIdentifier();
+            QStringList idParts=identifier.split(".");
+            QString bomTypeName;
+            bomTypeName= idParts.at(0);
+            int instNo=idParts.at(1).toInt();
+
+            BOMObject* bomType= this->m_BOMTypeLoader->FindBOMType( bomTypeName);
+            BOMInstance* instToCreate;
+
+            instToCreate=this->m_BOMInstanceCreator->createBOMInstance(bomType,item->getPosition().x(),item->getPosition().y(),"");
+            instToCreate->setInstanceNumber(instNo);
+
+            this->m_currentView->getCurrentScene()->addItem(instToCreate);
+            //this->m_BOMInstancesList.append(instToCreate);
+            this->m_currentView->getCurrentScene()->AddBOMInstance(instToCreate);
+        }
+    }
+    loadScenarioActionsToTable();
 }
 
 

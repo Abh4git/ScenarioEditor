@@ -65,6 +65,14 @@ public:
 	{
 		m_currentSceneActions=sceneActions;
 	}
+    //! setCurrentSceneItems
+    /*!
+        Set the sceneItem(s)
+    */
+    void setCurrentSceneItemsList(QList<SceneItem*> sceneItems)
+    {
+        m_currentSceneItems=sceneItems;
+    }
 protected:
 	void mousePressEvent(QMouseEvent* e);
 	void mouseReleaseEvent(QMouseEvent* e);

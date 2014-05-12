@@ -26,6 +26,8 @@
  #include <QFileDialog>
 #include <qcombobox.h>
 #include <ScenarioReader.h>
+#include <editorevent.h>
+
 using namespace BOMLIB;
 //! AutomationElementsWidget Class
 /*!
@@ -42,16 +44,23 @@ public:
 	AutomationElementsWidget(QWidget *parent = 0);
 	//! Destructor
 	~AutomationElementsWidget();
+
 protected:
 	//! contextMenuEvent override for ContextMenu to appear
      void contextMenuEvent(QContextMenuEvent *event);
 public slots:
+
+     //! openScenarioFromFile
+     /*!
+         Open Scenario From File and load the SceneItems, Actions in memory
+     */
+     void openScenarioFromFile();
+     //! loadActionList
+     /*!
+         Load the actions to the right pane table
+     */
+     void loadScenarioActionsToTable();
 private slots:
-    //! openScenarioFromFile
-	/*!
-		Open Scenario From File and load the SceneItems, Actions in memory
-	*/
-	void openScenarioFromFile();
 	//! refreshActionList
 	/*!
 		Refresh Actions based on SceneItems added

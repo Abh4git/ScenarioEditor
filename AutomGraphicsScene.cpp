@@ -121,10 +121,15 @@ void AutomGraphicsScene::clearAllItems()
 	this->m_BOMInstanceList.clear();
 	this->m_Connections.clear();
 	this->clear();
+
+    foundChanges();
 }
 
 void AutomGraphicsScene::foundChanges()
 {
-    QEvent* event1= new QEvent(QEvent::ChildRemoved);
-    QApplication::postEvent(this->parent(),event1);
+    const QEvent::Type eventClear = (QEvent::Type)2000;
+    QApplication::postEvent(this,new QEvent(eventClear));
+    //QMessageBox box;
+    //box.setText("Posted");
+    //box.exec();
   }

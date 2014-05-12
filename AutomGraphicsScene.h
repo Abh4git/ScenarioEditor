@@ -9,6 +9,7 @@
 #include "../BOMGraphicalLibrary/bominstance.h"
 #include <Singleton.h>
 #include <QApplication>
+#include <QMessageBox>
 
 QT_BEGIN_NAMESPACE
 class QDragEnterEvent;

@@ -14,12 +14,12 @@ int main(int argc, char *argv[])
 
 	
 
-	AutomationWizard w;
+
 	
 	
-	AutomationElementsWidget w1;
-	
-	w.setCentralWidget(&w1);
+    //AutomationElementsWidget w1;
+    AutomationWizard w;
+    //w.setCentralWidget(&w1);
 	w.show(); 
 	/*TestListWidgetwithImage w;
 	w.show();*/
