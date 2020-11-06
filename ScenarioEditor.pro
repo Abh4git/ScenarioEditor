@@ -5,24 +5,19 @@
 TEMPLATE = app
 TARGET = ScenarioEditor
 DESTDIR = ./Output
-QT += widgets
-#core gui
+QT += core gui
 CONFIG += release
 DEFINES += QT_LARGEFILE_SUPPORT QT_DLL
 INCLUDEPATH += ./GeneratedFiles \
     . \
     ./GeneratedFiles/Release
-#LIBS += C:\Abhilash\MyToolBox\OpenSourceBranch\ScenarioEditor\Output\libBOMLibrary.a
-LIBS += $$PWD/Output/libBOMLibrary.a
-LIBS += $$PWD/Output/libBOMGraphicalLibrary.a
-    #-l BOMLibrary \
-    #-l BOMGraphicalLibrary
-#MAKEFILE = Makefile
+LIBS += -L"$(OutDir)" \
+    -l BOMLibrary \
+    -l BOMGraphicalLibrary
 #PRECOMPILED_HEADER = StdAfx.h
-DEPENDPATH += ./Output
+DEPENDPATH += .
 MOC_DIR += ./GeneratedFiles/release
 OBJECTS_DIR += release
 UI_DIR += ./GeneratedFiles
 RCC_DIR += ./GeneratedFiles
-RESOURCES += ./Resources/automationwizard.qrc
 include(ScenarioEditor.pri)

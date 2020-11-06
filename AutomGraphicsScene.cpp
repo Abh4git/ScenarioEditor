@@ -47,10 +47,10 @@ void AutomGraphicsScene::dropEvent(QGraphicsSceneDragDropEvent *event) {
 	//x-30, Y-30 (bottom left) and x+30,y-30 (bottom right)
 	int xPos=0;
 	int yPos=0;
-    QGraphicsItem* itemToSnap= this->itemAt(event->scenePos().x()-30,event->scenePos().y()+30,QTransform() );
-    if (itemToSnap==NULL) itemToSnap= this->itemAt(event->scenePos().x()+30,event->scenePos().y()+30,QTransform() );
-    if (itemToSnap==NULL) itemToSnap= this->itemAt(event->scenePos().x()-30,event->scenePos().y()-30,QTransform() );
-    if (itemToSnap==NULL) itemToSnap= this->itemAt(event->scenePos().x()+30,event->scenePos().y()-30,QTransform() );
+	QGraphicsItem* itemToSnap= this->itemAt(event->scenePos().x()-30,event->scenePos().y()+30);
+	if (itemToSnap==NULL) itemToSnap= this->itemAt(event->scenePos().x()+30,event->scenePos().y()+30);
+	if (itemToSnap==NULL) itemToSnap= this->itemAt(event->scenePos().x()-30,event->scenePos().y()-30);
+	if (itemToSnap==NULL) itemToSnap= this->itemAt(event->scenePos().x()+30,event->scenePos().y()-30);
 	if (itemToSnap!=NULL) //nearby item exists
 	{
 		xPos= itemToSnap->scenePos().x();
@@ -121,15 +121,4 @@ void AutomGraphicsScene::clearAllItems()
 	this->m_BOMInstanceList.clear();
 	this->m_Connections.clear();
 	this->clear();
-
-    foundChanges();
 }
-
-void AutomGraphicsScene::foundChanges()
-{
-    const QEvent::Type eventClear = (QEvent::Type)2000;
-    QApplication::postEvent(this,new QEvent(eventClear));
-    //QMessageBox box;
-    //box.setText("Posted");
-    //box.exec();
-  }

@@ -3,7 +3,7 @@
 
 #include <qmessagebox.h>
 #include <qstringlist.h>
-#include <../BOMLibrary/Glymph.h>
+#include <../../BOMLibrary/Glymph.h>
 #include <qpushbutton.h>
 
 AutomationElementsWidget::AutomationElementsWidget(QWidget *parent)
@@ -16,7 +16,6 @@ AutomationElementsWidget::AutomationElementsWidget(QWidget *parent)
 	loadTypeDefinitions();
 	
 	setupWidgets();
-    m_Order=0;
 
 }
 
@@ -30,35 +29,26 @@ void AutomationElementsWidget::LoadPlugins()
 	QString currentPath=QDir::currentPath();
 	m_applicationPath=currentPath;
 	QMessageBox msgbox;
-    //msgbox.setText(m_applicationPath);
-    //msgbox.exec();
+	msgbox.setText(m_applicationPath);
+	msgbox.exec();
 	//QMessageBox box;
 	//box.setText(currentPath);
 	//box.exec();
 	//loading BOMLibrary
-    //QPluginLoader loaderType(currentPath +  "\\Output\\BOMLibrary.dll");
-    QPluginLoader loaderType(currentPath +  "\\BOMLibrary.dll");
+	QPluginLoader loaderType(currentPath +  "\\Output\\BOMLibrary.dll");
     QObject *pluginType = loaderType.instance();
 	QString error=loaderType.errorString();
 	if (pluginType) this->m_BOMTypeLoader=qobject_cast<IBOMTypeLoadInterface*> (pluginType);
-    if (!loaderType.isLoaded())
-    {
-        msgbox.setText(error);
-        msgbox.exec();
-    }
 	//loading BOmGraphicalLibrary
-    //QPluginLoader loaderInst(currentPath +  "\\Output\\BOMGraphicalLibrary.dll");
-    QPluginLoader loaderInst(currentPath +  "\\BOMGraphicalLibrary.dll");
+	QPluginLoader loaderInst(currentPath +  "\\Output\\BOMGraphicalLibrary.dll");
 		//"C:\\Abhilash\\MyToolBox\\SystemsExplorer\\Win32\\Debug\\BOMGraphicalLibrary.dll");
 	QObject *pluginInst = loaderInst.instance();
 	QString insterror=loaderInst.errorString();
 	if (pluginInst) this->m_BOMInstanceCreator=qobject_cast<IBOMInstanceCreation*> (pluginInst);
-    if (!loaderInst.isLoaded())
-    {
 	msgbox.setText(insterror);
 	msgbox.exec();
-    }
 }
+
 void AutomationElementsWidget::loadTypeDefinitions()
 {
 	
@@ -143,9 +133,7 @@ void AutomationElementsWidget::setupWidgets()
 	verticalRightLayout->setStretchFactor(this,4);
 	
 	
-    //commented and uncommented abhilash 7 may
-    //createAllocationTableView();
-    createSceneActionTableView();
+	createAllocationTableView();
 
 	QSplitter* splitVertBetwnAllocAndPropBox= new QSplitter(Qt::Vertical);
 
@@ -205,11 +193,7 @@ bool AutomationElementsWidget::eventFilter(QObject* target,QEvent* event)
 	}
 	if (event->type()==QEvent::GraphicsSceneContextMenu)
 	{
-
-        QAction* action;
-        action = (QAction*) target;
-        if (action->data() ==123)
-        //if (target->objectName()=="m_actClearAll")
+		if (target->objectName()=="m_actClearAll")
 		{
 		//Some move has happened..
 		msgbox.setText("Conext menu clear");
@@ -217,92 +201,8 @@ bool AutomationElementsWidget::eventFilter(QObject* target,QEvent* event)
 		}
 		//return true;
 	}
-    //if (event->type()==QEvent::ChildRemoved)
-    if (event->type()==EditorEvent::clearAll)
-    {
-        //msgbox.setText("reset all");
-        //msgbox.exec();
-
-        //Cleared items redirected using this
-        refreshActionList();
-        //msgbox.setText("Conext menu clear");
-        //msgbox.exec();
-
-        //return true;
-    }
-
-    //if (event->type()==QEvent::ChildAdded)
-    if (event->type()==EditorEvent::openScene)
-    {
-
-        msgbox.setText("Open File");
-        msgbox.exec();
-        //Cleared items redirected using this
-        openScenarioFromFile();
-        //msgbox.setText("Conext menu clear");
-        //msgbox.exec();
-
-        //return true;
-    }
-
+	
 	return QWidget::eventFilter(target,event);
-}
-
-void AutomationElementsWidget::loadScenarioActionsToTable()
-{
-    QMessageBox box;
-    //box.setText(QString::number (this->m_currentView->getCurrentSceneActions().count()));
-   // box.exec();
-    QList<SceneAction*> currentSceneActions=this->m_currentView->getCurrentSceneActions();
-    refreshActionList();
-    //now set the right values
-
-    for(int i=0; i<currentSceneActions.count();i++) // this->m_tblAllocation->rowCount(); i++)
-    {
-
-        SceneAction* actionCurrent=currentSceneActions.at(i);
-         QComboBox* comboActionType=(QComboBox*)this->m_tblAllocation->cellWidget(i,1);
-         QComboBox* comboSource=(QComboBox*)this->m_tblAllocation->cellWidget(i,2);
-         QComboBox* comboDest=(QComboBox*)this->m_tblAllocation->cellWidget(i,3);
-
-           QTableWidgetItem *itabOrder = (QTableWidgetItem *) this->m_tblAllocation->item(i,0);
-           itabOrder->setText(QString::number(actionCurrent->getOrder()));
-         //QTableWidgetItem *itabOrder = (QTableWidgetItem *) this->m_tblAllocation->cellWidget(i,0);
-         //itabOrder->setText(QString::number( i+1)); //QString::number(m_Order));
-         this->m_tblAllocation->setItem (i, 0,itabOrder );
-
-
-         QTableWidgetItem *itabTimeToNextAction = this->m_tblAllocation->item(i,5);
-         itabTimeToNextAction->setText(QString::number( actionCurrent->getwaitTimeBeforeNext()));
-         this->m_tblAllocation->setItem (i, 5,itabTimeToNextAction );
-         QTableWidgetItem *itabReatNoofTimes= this->m_tblAllocation->item(i,4);
-         itabReatNoofTimes->setText(QString::number( actionCurrent->getNoofTimesToRepeat()));
-         this->m_tblAllocation->setItem (i, 4,itabReatNoofTimes );
-
-         QTableWidgetItem *itabTitle = this->m_tblAllocation->item(i,6);
-         itabTitle->setText(actionCurrent->gettextTite());
-         this->m_tblAllocation->setItem (i, 6,itabTitle );
-         //box.setText("Works till here");
-           //box.exec();
-
-         int indexType = comboActionType->findData(QString::number(actionCurrent->getObjectType()));
-
-             if ( indexType != -1 ) { // -1 for not found
-                comboActionType->setCurrentIndex(indexType);
-             }
-
-             int indexSource = comboSource->findData(actionCurrent->getSourceName());
-
-                 if ( indexSource != -1 ) { // -1 for not found
-                    comboSource->setCurrentIndex(indexSource);
-                 }
-
-                 int indexDest = comboSource->findData(actionCurrent->getDestName());
-
-                     if ( indexDest != -1 ) { // -1 for not found
-                        comboDest->setCurrentIndex(indexDest);
-                     }
-    }
 }
 
 QString AutomationElementsWidget::getInstanceIdentifier(int index)
@@ -340,10 +240,7 @@ void AutomationElementsWidget::setActionList()
 	for(int i=0; i<this->m_tblAllocation->rowCount(); i++)
 	{
 		QString order= this->m_tblAllocation->item(i, 0)->text();
-        QComboBox* comboOrder=(QComboBox*)this->m_tblAllocation->cellWidget(i,1);
-         int selType=comboOrder->currentIndex();
-         selType++;
-        QString type=QString::number(selType);
+		QString type= this->m_tblAllocation->item(i, 1)->text();
 
 		QComboBox* combo=(QComboBox*)this->m_tblAllocation->cellWidget(i,2);  
 		int selIndex=combo->currentIndex();
@@ -355,85 +252,49 @@ void AutomationElementsWidget::setActionList()
 		QString dest= getInstanceIdentifier(selIndexDest);
 		QString repeat= this->m_tblAllocation->item(i, 4)->text();
 		QString waittime= this->m_tblAllocation->item(i, 5)->text();
-        QString title= this->m_tblAllocation->item(i, 6)->text();
-        if (order!="" && source!="" && title!="Default")
+		if (order!="" && source!="")
 		{
-
-        SceneAction* sceneAction= new SceneAction(QString::number(i),type.toInt(),order.toInt(), source,dest,repeat.toInt(),waittime.toInt(),title);
+		SceneAction* sceneAction= new SceneAction(QString::number(i),type.toInt(),order.toInt(), source,dest,repeat.toInt(),waittime.toInt());
 		this->m_currentSceneActions.append(sceneAction);
 		}
 
 	}
-    this->m_currentView->setCurrentSceneActionList(this->m_currentSceneActions);
+	this->m_currentView->setCurrentSceneActionList(this->m_currentSceneActions);
 
 }
 
-//When an Item is added this gets triggered and adds rows
+
 void AutomationElementsWidget::refreshActionList()
 {
 	
 	this->m_BOMInstancesList= this->m_currentView->getCurrentScene()->getBOMInstanceList();
 	//if nof instances *2 should be the number of rows
 	int count=this->m_BOMInstancesList.count();
-    //this->m_tblAllocation->clear();
-    //createAllocationTableView();
-    this->m_tblAllocation->setRowCount(count*2);
+	this->m_tblAllocation->clear();
+	this->m_tblAllocation->setRowCount(2);
 	int actualCount=0;
-    int i=count;
-    if (count <2) return;
-    for(int i=0;i<count*2;i++)
+	for(int i=0;i<count*2;i++)
 	{
 
-        m_Order ++;
-        QComboBox* m_ComboSource;
-        m_ComboSource= new QComboBox(this);
+		QComboBox* m_ComboSource;
+		m_ComboSource= new QComboBox(this);
 		QComboBox* m_ComboDest;
 		m_ComboDest= new QComboBox(this);
-        QComboBox* m_ComboActionType;
-        m_ComboActionType= new QComboBox(this);
-        m_ComboActionType->addItem("1","1"); //Message
-        m_ComboActionType->addItem("2","2"); //Signal
-        m_ComboActionType->addItem("3", "3");//Steam/Heat
-        m_ComboActionType->addItem("4","4");//Callout
-        m_ComboActionType->addItem("5","5");//Custom
-        m_ComboActionType->setToolTip("1-Message,2-Signal,3-SteamorHeat,4-Callout,5-Custom");
+		
 		foreach (BOMInstance* inst,this->m_BOMInstancesList)
 		{
 			if (inst->GetContainedBOMType()->GetModelIdentification()->GetName()!="COM_BUS")
 			{
 			QString identifier= inst->GetContainedBOMType()->GetModelIdentification()->GetName() + "." + QString::number(inst->GetInstanceNumber());
-            m_ComboSource->addItem(identifier,identifier);
-            m_ComboDest->addItem(identifier,identifier);
+			m_ComboSource->addItem(identifier);
+			m_ComboDest->addItem(identifier);
 			actualCount++;
 			}
 		}
-        QTableWidgetItem *itabOrder;
-        itabOrder= new QTableWidgetItem();
-        itabOrder->setText(QString::number( i+1)); //QString::number(m_Order));
-        this->m_tblAllocation->setItem (i, 0,itabOrder );
-        m_ComboSource->setToolTip("Select Source Object");
-        m_ComboDest->setToolTip("Select Destination Object");
-        this->m_tblAllocation->setCellWidget(i, 1, m_ComboActionType);
-        this->m_tblAllocation->setCellWidget(i, 2, m_ComboSource);
-        this->m_tblAllocation->setCellWidget(i, 3, m_ComboDest);
-
-        QTableWidgetItem *itabTimeToNextAction;
-        itabTimeToNextAction= new QTableWidgetItem();
-        itabTimeToNextAction->setText("1000");
-        itabOrder->setToolTip("Specify Order");
-        itabTimeToNextAction->setToolTip("Specify Time to wait in ms before next action");
-        this->m_tblAllocation->setItem (i, 5,itabTimeToNextAction );
-        QTableWidgetItem *itabReatNoofTimes;
-        itabReatNoofTimes= new QTableWidgetItem();
-        itabReatNoofTimes->setToolTip("Specify No of Times the action is to be performed");
-        itabReatNoofTimes->setText("3");
-        this->m_tblAllocation->setItem (i, 4,itabReatNoofTimes );
-        QTableWidgetItem *itabTitle;
-        itabTitle= new QTableWidgetItem();
-        itabTitle->setToolTip("Specify Message Title");
-        itabTitle->setText("Deafult");
-        this->m_tblAllocation->setItem (i, 6,itabTitle );
-
+		
+		
+		this->m_tblAllocation->setCellWidget(i, 2, m_ComboSource);
+		this->m_tblAllocation->setCellWidget(i, 3, m_ComboDest);
 	}	
 	
 }
@@ -445,49 +306,8 @@ void AutomationElementsWidget::openScenarioFromFile()
 
 		//from instances 
 
-    QMessageBox box;
-
-    QString selfilter = tr("XML (*.xml)");
-    QString fileName = QFileDialog::getOpenFileName(this,"Open Scene File","C:",  tr("XML Scenaio files (*.xml)" ), &selfilter );
-    //Reading Scenario
-    if  (fileName != "")
-    {
-            ScenarioReader* reader1=new ScenarioReader(fileName);
-            reader1->SetDirectory("C:/");
-            reader1->ReadDefintions();
-            QList<SceneItem*> topology;
-            topology= reader1->GetSceneTopology();
-
-            this->m_currentView->setCurrentSceneItemsList(topology);
-            QList<SceneAction*> actions=reader1->GetActionSequence();
-
-            this->m_currentView->setCurrentSceneActionList(actions);
-            //box.setText(QString::number(actions.count()));
-            //box.exec();
-            QList<ComAction*> comactions=reader1->GetComActions();
-
-
-        this->m_BOMInstancesList=  QList<BOMInstance*>();
-        foreach(SceneItem* item,topology)
-        {
-            QString identifier=item->getIdentifier();
-            QStringList idParts=identifier.split(".");
-            QString bomTypeName;
-            bomTypeName= idParts.at(0);
-            int instNo=idParts.at(1).toInt();
-
-            BOMObject* bomType= this->m_BOMTypeLoader->FindBOMType( bomTypeName);
-            BOMInstance* instToCreate;
-
-            instToCreate=this->m_BOMInstanceCreator->createBOMInstance(bomType,item->getPosition().x(),item->getPosition().y(),"");
-            instToCreate->setInstanceNumber(instNo);
-
-            this->m_currentView->getCurrentScene()->addItem(instToCreate);
-            //this->m_BOMInstancesList.append(instToCreate);
-            this->m_currentView->getCurrentScene()->AddBOMInstance(instToCreate);
-        }
-    }
-    loadScenarioActionsToTable();
+	
+	
 }
 
 
@@ -505,7 +325,7 @@ void AutomationElementsWidget::contextMenuEvent(QContextMenuEvent *event)
  {
      //QMenu menu(this);
 	 QMenu menu(this->m_currentView);
-     menu.addAction(m_actrefreshActionList);
+	 menu.addAction(m_actrefreshActionList);
 	 menu.addAction(m_actsetActionList);
 	 /* not used
      menu.addAction(m_actDrillDown);
@@ -566,13 +386,12 @@ void AutomationElementsWidget::contextMenuEvent(QContextMenuEvent *event)
 	this->m_tblMessages->setCellWidget(1,1,button); */
 
 }
-//renamed to createSceneActionTableView
-//void AutomationElementsWidget::createAllocationTableView()
-    void AutomationElementsWidget::createSceneActionTableView()
+
+void AutomationElementsWidget::createAllocationTableView()
 {
 	//Alloaction table here
 	this->m_tblAllocation= new QTableWidget;
-    this->m_tblAllocation->setColumnCount(7);
+	this->m_tblAllocation->setColumnCount(6);
 	this->m_tblAllocation->setRowCount(2);
 	QStringList msgHeaders;
 	msgHeaders.append("Order");
@@ -581,7 +400,6 @@ void AutomationElementsWidget::contextMenuEvent(QContextMenuEvent *event)
 	msgHeaders.append("Destination");
 	msgHeaders.append("NoofTimesToRepeat");
 	msgHeaders.append("TimeToWaitTillNextStep");
-    msgHeaders.append("Title");
 	this->m_tblAllocation->setHorizontalHeaderLabels(msgHeaders);
 	
 		//from scl

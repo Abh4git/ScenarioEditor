@@ -11,13 +11,12 @@ AutomGraphicsView::AutomGraphicsView(QList<BOMObject*> bomTypesList,  IBOMTypeLo
         this->setSceneRect(50, 50, 350, 350);
         this->setScene(scene);
 
-        m_actConnectItems = new QAction(tr("&Connect the elements"), this);
+		m_actConnectItems = new QAction(tr("&Connect with COM_BUS"), this);
         m_actConnectItems->setStatusTip(tr("Connect with another Item"));
 		connect(m_actConnectItems, SIGNAL(triggered()), this, SLOT(doConnectItems()));
 	 //menu for animation - action
 	 m_actClearAll = new QAction(tr("&Clear All"), this);
      m_actClearAll->setStatusTip(tr("Clear All Items"));
-     m_actClearAll->setData(123);
      connect(m_actClearAll, SIGNAL(triggered()), this, SLOT(clearAllItems()));
 	 //menu for save - action
 	 m_actSaveScene = new QAction(tr("&Save Scenario"), this);
@@ -39,10 +38,10 @@ AutomGraphicsView::AutomGraphicsView(QList<BOMObject*> bomTypesList,  IBOMTypeLo
 void AutomGraphicsView::openScenarioFromFile()
 {
 	QString selfilter = tr("XML (*.xml)");
-    QString defaultScenePath= QDir::currentPath() ;
-    QString fileName = QFileDialog::getOpenFileName(this,"Open Scene File",defaultScenePath,  tr("XML files (*.xml)" ), &selfilter );
+	QString defaultScenePath= QDir::currentPath() + "\\Scenarios";
+	QString fileName = QFileDialog::getOpenFileName(this,"Open Scene File",defaultScenePath,  tr("All files (*.*);;JPEG (*.jpg *.jpeg);;TIFF (*.tif)" ), &selfilter );
 	ReadScenario(fileName);
-     //doConnectItems();
+	 doConnectItems();
 }
 void AutomGraphicsView::ReadScenario(QString fileName)
 {
@@ -73,7 +72,7 @@ void AutomGraphicsView::ReadScenario(QString fileName)
 		if (bomTypeName=="COM_BUS") combusInst=instToCreate;
 	}
 
-    /*foreach(BOMInstance* inst,this->scene->getBOMInstanceList())
+	foreach(BOMInstance* inst,this->scene->getBOMInstanceList())
 	{ 
 		if (inst!=combusInst)
 		{
@@ -82,7 +81,6 @@ void AutomGraphicsView::ReadScenario(QString fileName)
 		this->getCurrentScene()->getConnections().append(itemConEng);
 		}
 	}
-    */
 	
 
 }
@@ -145,7 +143,7 @@ void AutomGraphicsView::doConnectItems()
 	if (boiler!=NULL && turbine!=NULL)
 	{
 	ConnectorGraphicitem* itemConToTurbine;
-    itemConToTurbine=this->getCurrentScene()->getBOMInstanceCreator()->createConnector(boiler->boundingRect().topRight().x()-70,boiler->boundingRect().center().y(),turbine->boundingRect().topLeft().x(),boiler->boundingRect().center().y(),"Steam flow");
+	itemConToTurbine=this->getCurrentScene()->getBOMInstanceCreator()->createConnector(boiler->boundingRect().center().x()-40,boiler->boundingRect().center().y()+10,turbine->boundingRect().center().x()-40,turbine->boundingRect().bottomRight().y(),"Steam flow");
 	this->scene->addItem(itemConToTurbine);
 	}
 	//from turbine to generator
@@ -153,7 +151,7 @@ void AutomGraphicsView::doConnectItems()
 	{
 	
 	ConnectorGraphicitem* itemConFromTurbine;
-    itemConFromTurbine=this->getCurrentScene()->getBOMInstanceCreator()->createConnector(turbine->boundingRect().topRight().x()-40,turbine->boundingRect().center().y(),generator->boundingRect().topLeft().x(),turbine->boundingRect().center().y(),"Power");
+	itemConFromTurbine=this->getCurrentScene()->getBOMInstanceCreator()->createConnector(turbine->boundingRect().center().x()-40,turbine->boundingRect().center().y()+10,generator->boundingRect().center().x()-40,generator->boundingRect().bottomRight().y(),"Power");
 	this->scene->addItem(itemConFromTurbine);
 	}
 
@@ -162,7 +160,7 @@ void AutomGraphicsView::doConnectItems()
 	{
 	
 	ConnectorGraphicitem* itemConBoilerToDev;
-    itemConBoilerToDev=this->getCurrentScene()->getBOMInstanceCreator()->createConnector(boiler->boundingRect().bottomRight().x()-40,boiler->boundingRect().bottomRight().y()+10,controldev->boundingRect().topLeft().x(),boiler->boundingRect().bottomRight().y()+10,"Signal flow");
+	itemConBoilerToDev=this->getCurrentScene()->getBOMInstanceCreator()->createConnector(boiler->boundingRect().center().x()-40,boiler->boundingRect().center().y()+10,controldev->boundingRect().center().x()-40,controldev->boundingRect().bottomRight().y(),"Signal flow");
 	this->scene->addItem(itemConBoilerToDev);
 	}
 	

@@ -92,10 +92,8 @@ void ObjectsList::startDrag(Qt::DropActions /*supportedActions*/)
 {
     QListWidgetItem *item = currentItem();
     QByteArray itemData;
-
     QDataStream dataStream(&itemData, QIODevice::WriteOnly);
-    //QPixmap pixmap = qVariantFromValue<QPixmap>(item->data(Qt::UserRole).Pixmap);
-    QPixmap pixmap = item->data(Qt::UserRole).value<QPixmap>();
+    QPixmap pixmap = qVariantValue<QPixmap>(item->data(Qt::UserRole));
     QPoint location = item->data(Qt::UserRole+1).toPoint();
 	QString str=item->data(Qt::UserRole).toString();
     dataStream << pixmap << location;

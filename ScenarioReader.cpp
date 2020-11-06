@@ -87,7 +87,6 @@ bool ScenarioReader::ReadDefintions()
             QString id;
             QString sourceObj="";
 			QString destObj="";
-            QString txtTitle="";
             int type=0; 
 			int assocSceneId=0; int repeat=0;
 			int waitTime=0;
@@ -115,10 +114,7 @@ bool ScenarioReader::ReadDefintions()
             {
                 destObj=attribsArg.value("destaddress").toString();
             }
-            if (attribsArg.hasAttribute("title"))
-            {
-                txtTitle=attribsArg.value("title").toString();
-            }
+
 			if (attribsArg.hasAttribute("repeat"))
             {
                 repeat=attribsArg.value("repeat").toString().toInt();
@@ -202,7 +198,6 @@ bool ScenarioReader::ReadActions()
             QString id;
             QString sourceObj="";
 			QString destObj="";
-            QString title="";
             int type=0; 
 			int order=0; int repeat=0;
 			int waitTime=0;
@@ -239,11 +234,8 @@ bool ScenarioReader::ReadActions()
             {
                 waitTime=attribsArg.value("waittime").toString().toInt();
             }
-            if (attribsArg.hasAttribute("title"))
-            {
-                title=attribsArg.value("title").toString();
-            }
-            SceneAction* actionNew= new SceneAction(id,type,order,sourceObj,destObj,repeat,waitTime,title);
+				
+            SceneAction* actionNew= new SceneAction(id,type,order,sourceObj,destObj,repeat,waitTime);
 			this->m_ActionsList.append(actionNew);
             
 			}

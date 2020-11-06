@@ -1,6 +1,7 @@
 #include "automationwizard.h"
-#include <QApplication>
+#include <QtGui/QApplication>
 #include <automationelementswidget.h>
+#include <testlistwidgetwithimage.h>
 #include <qplugin.h>
 
 //Q_IMPORT_PLUGIN(qjpeg)
@@ -14,12 +15,12 @@ int main(int argc, char *argv[])
 
 	
 
-
+	AutomationWizard w;
 	
 	
-    //AutomationElementsWidget w1;
-    AutomationWizard w;
-    //w.setCentralWidget(&w1);
+	AutomationElementsWidget w1;
+	
+	w.setCentralWidget(&w1);
 	w.show(); 
 	/*TestListWidgetwithImage w;
 	w.show();*/

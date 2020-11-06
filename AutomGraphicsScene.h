@@ -3,13 +3,12 @@
 #include <QGraphicsSceneDragDropEvent>
 #include <qpixmap.h>
 #include <qgraphicssceneevent.h>
-#include <QGraphicsView>
+
 #include "../BOMLibrary/IBOMTypeLoadInterface.h"
 #include "../BOMGraphicalLibrary/IBOMInstanceCreation.h"
 #include "../BOMGraphicalLibrary/bominstance.h"
 #include <Singleton.h>
-#include <QApplication>
-#include <QMessageBox>
+
 
 QT_BEGIN_NAMESPACE
 class QDragEnterEvent;
@@ -63,7 +62,6 @@ public:
 	//! AddBOMInstance
 	/*!
 		Return the IBOMInstance creation object
-        \param instance BOMInstance*
 	*/
 	void AddBOMInstance(BOMInstance* instance)
 	{
@@ -72,8 +70,6 @@ public:
 	//! AssignBomInstanceNumber
 	/*!
 		Return the IBOMInstance creation object
-        \param bomTypeName string
-        \param bomInst BOMInstance*
 	*/
 	void AssignBomInstanceNumber(QString bomTypeName,BOMInstance* bomInst)
 	{
@@ -93,31 +89,14 @@ public:
 		
 		bomInst->setInstanceNumber(highestInstNumber+1);
 	}
-    //! getConnections
-    /*!
-        Return the QList of ConnectorGraphicitem* s
-    */
+
 	QList<ConnectorGraphicitem*> getConnections()
 	{
 		return m_Connections;
 	}
-    //! FindBOMType
-    /*!
-        Return the BOMObject based on BOMTypeName
-        \param BOMTypeName string
-    */
 	BOMObject* FindBOMType(QString BOMTypeName);
-    //! clearAllItems
-    /*!
-        Clear all the graphical items in scene as well as scene actions in
-        right pane.
-    */
-    void clearAllItems();
-    //! foundChanges
-    /*!
-        Found Changes based on detection logic.
-    */
-    void foundChanges();
+	void clearAllItems();
+
 protected:
 	void dragEnterEvent(QGraphicsSceneDragDropEvent *event);
     void dragMoveEvent(QGraphicsSceneDragDropEvent *event);

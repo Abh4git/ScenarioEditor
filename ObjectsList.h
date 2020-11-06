@@ -5,8 +5,6 @@
 
 #include <QListWidget>
 #include "../BOMLibrary/bomobject.h"
-#include <qvariant.h>
-
 #include <qstring.h>
 using namespace BOMLIB;
 	//! ObjectsList class
